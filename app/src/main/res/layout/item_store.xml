@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:button="@drawable/states_cb_favorite"
-        android:checked="true"
+        android:checked="false"
         android:buttonTint="@color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

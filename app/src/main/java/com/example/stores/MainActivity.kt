@@ -56,4 +56,26 @@ class MainActivity : AppCompatActivity(), OnClickListener {
     override fun onClick(storeEntity: StoreEntity, position: Int) {
         TODO("Not yet implemented")
     }
+
+    override fun onFavoriteStore(storeEntity: StoreEntity) {
+        storeEntity.isFavorite = !storeEntity.isFavorite
+        val queue = LinkedBlockingQueue<StoreEntity>()
+        Thread {
+            StoreApplication.database.storeDao().updateStore(storeEntity)
+            queue.add(storeEntity)
+        }.start()
+        mAdapter.update(queue.take())
+    }
+
+    override fun onDeleteStore(storeEntity: StoreEntity) {
+        storeEntity.isFavorite = !storeEntity.isFavorite
+        val queue = LinkedBlockingQueue<StoreEntity>()
+        Thread {
+            StoreApplication.database.storeDao().deleteStore(storeEntity)
+            queue.add(storeEntity)
+        }.start()
+        mAdapter.delete(queue.take())
+    }
+
+
 }
