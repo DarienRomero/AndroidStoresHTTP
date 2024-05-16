@@ -9,14 +9,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.stores.databinding.ItemStoreBinding
 
-class StoreAdapter(private val stores: MutableList<Store>, private val listener: OnClickListener) : RecyclerView.Adapter<StoreAdapter.ViewHolder>() {
+class StoreAdapter(private var stores: MutableList<StoreEntity>, private val listener: OnClickListener) : RecyclerView.Adapter<StoreAdapter.ViewHolder>() {
     private lateinit var context: Context
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
         val binding = ItemStoreBinding.bind(view)
 
-        fun setListener(store: Store, position: Int){
-            binding.root.setOnClickListener { listener.onClick(store, position) }
+        fun setListener(storeEntity: StoreEntity, position: Int){
+            binding.root.setOnClickListener { listener.onClick(storeEntity, position) }
         }
     }
 
@@ -50,8 +50,13 @@ class StoreAdapter(private val stores: MutableList<Store>, private val listener:
         notifyItemRemoved(position)
     }
 
-    fun add(store: Store) {
-        stores.add(store)
+    fun add(storeEntity: StoreEntity) {
+        stores.add(storeEntity)
+        notifyDataSetChanged()
+    }
+
+    fun setStores(stores: MutableList<StoreEntity>) {
+        this.stores = stores
         notifyDataSetChanged()
     }
 }

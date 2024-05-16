@@ -1,6 +1,6 @@
 package com.example.stores
 
 interface OnClickListener {
-    fun onClick(store: Store, position: Int)
+    fun onClick(storeEntity: StoreEntity, position: Int)
 }
 
