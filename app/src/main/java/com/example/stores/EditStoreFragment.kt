@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.example.stores.databinding.FragmentEditStoreBinding
+import com.google.android.material.snackbar.Snackbar
 
 class EditStoreFragment : Fragment() {
 
@@ -47,8 +48,22 @@ class EditStoreFragment : Fragment() {
                 mActivity?.onBackPressedDispatcher?.onBackPressed()
                 true
             }
+            R.id.action_save -> {
+                Snackbar.make(mBinding.root, getString(R.string.edit_store_message_success), Snackbar.LENGTH_SHORT).show()
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+
+            }
         }
-        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroy() {
+        mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        mActivity?.supportActionBar?.title = getString(R.string.app_name)
+        mActivity?.hideFab(true)
+        super.onDestroy()
     }
 
 

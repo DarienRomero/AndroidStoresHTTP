@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.stores.databinding.ActivityMainBinding
 import java.util.concurrent.LinkedBlockingQueue
 
-class MainActivity : AppCompatActivity(), OnClickListener {
+class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
 
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var mAdapter: StoreAdapter
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
 
-        mBinding.fab.hide()
+        hideFab(false)
 
     }
 
@@ -93,7 +93,13 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         mAdapter.delete(queue.take())
     }
 
-
+    override fun hideFab(isVisible: Boolean) {
+        if(isVisible){
+            mBinding.fab.show()
+        }else{
+            mBinding.fab.hide()
+        }
+    }
 
 
 }
