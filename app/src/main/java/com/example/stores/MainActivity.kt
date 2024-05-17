@@ -15,17 +15,32 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        mBinding.btnSave.setOnClickListener {
-            val storeEntity = StoreEntity(
-                name = mBinding.etName.text.toString().trim()
-            )
-            Thread{
-                StoreApplication.database.storeDao().addStore(storeEntity)
-            }.start()
-
-            mAdapter.add(storeEntity)
+//        mBinding.btnSave.setOnClickListener {
+//            val storeEntity = StoreEntity(
+//                name = mBinding.etName.text.toString().trim()
+//            )
+//            Thread{
+//                StoreApplication.database.storeDao().addStore(storeEntity)
+//            }.start()
+//
+//            mAdapter.add(storeEntity)
+//        }
+        mBinding.fab.setOnClickListener {
+            launchEditFragment()
         }
         setupRecyclerView()
+    }
+
+    private fun launchEditFragment() {
+        val fragment = EditStoreFragment()
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+
+        fragmentTransaction.add(R.id.containerMain, fragment)
+        fragmentTransaction.commit()
+
+        mBinding.fab.hide()
+
     }
 
     private fun setupRecyclerView(){
@@ -76,6 +91,8 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         }.start()
         mAdapter.delete(queue.take())
     }
+
+
 
 
 }
