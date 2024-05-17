@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
         val fragmentTransaction = fragmentManager.beginTransaction()
 
         fragmentTransaction.add(R.id.containerMain, fragment)
+        //Le da el comportamiento de superposicion. Habilita el botón de back
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
 
