@@ -1,5 +1,6 @@
 package com.example.stores
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import com.example.stores.databinding.FragmentEditStoreBinding
 import com.google.android.material.snackbar.Snackbar
 import java.util.concurrent.LinkedBlockingQueue
@@ -66,11 +69,16 @@ class EditStoreFragment : Fragment() {
 
                 Thread{
                     val id = StoreApplication.database.storeDao().addStore(store)
+                    store.id = id
                     queue.add(id)
                 }.start()
 
                 with(queue.take()){
-                    Snackbar.make(mBinding.root, getString(R.string.edit_store_message_success), Snackbar.LENGTH_SHORT).show()
+                    mActivity?.addStore(store)
+                    hideKeyboard()
+                    //Snackbar.make(mBinding.root, getString(R.string.edit_store_message_success), Snackbar.LENGTH_SHORT).show()
+                    Toast.makeText(mActivity, getString(R.string.edit_store_message_success), Toast.LENGTH_SHORT).show()
+                    mActivity?.onBackPressedDispatcher?.onBackPressed()
                 }
 
                 true
@@ -80,6 +88,16 @@ class EditStoreFragment : Fragment() {
 
             }
         }
+    }
+
+    private fun hideKeyboard(){
+        val imm = mActivity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
+    }
+    //Se ejecuta antes que onDestroy
+    override fun onDestroyView() {
+        hideKeyboard()
+        super.onDestroyView()
     }
 
     override fun onDestroy() {

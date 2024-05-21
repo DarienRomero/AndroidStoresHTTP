@@ -2,6 +2,7 @@ package com.example.stores
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.stores.databinding.ActivityMainBinding
 import java.util.concurrent.LinkedBlockingQueue
@@ -15,16 +16,6 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-//        mBinding.btnSave.setOnClickListener {
-//            val storeEntity = StoreEntity(
-//                name = mBinding.etName.text.toString().trim()
-//            )
-//            Thread{
-//                StoreApplication.database.storeDao().addStore(storeEntity)
-//            }.start()
-//
-//            mAdapter.add(storeEntity)
-//        }
         mBinding.fab.setOnClickListener {
             launchEditFragment()
         }
@@ -63,7 +54,10 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
             queue.add(stores)
         }.start()
 
-        mAdapter.setStores(queue.take())
+        val stores = queue.take()
+
+        Log.d("TEST", stores.size.toString())
+        mAdapter.setStores(stores)
 
     }
 
@@ -100,6 +94,14 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
         }else{
             mBinding.fab.hide()
         }
+    }
+
+    override fun addStore(storeEntity: StoreEntity) {
+        mAdapter.add(storeEntity)
+    }
+
+    override fun updateStore(storeEntity: StoreEntity) {
+
     }
 
 
