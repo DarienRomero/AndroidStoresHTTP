@@ -11,6 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.stores.databinding.FragmentEditStoreBinding
 import com.google.android.material.snackbar.Snackbar
 import java.util.concurrent.LinkedBlockingQueue
@@ -32,13 +35,21 @@ class EditStoreFragment : Fragment() {
     //Ocurre después del onCreateView
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mActivity = activity as? MainActivity
+
+       mActivity = activity as? MainActivity
         //Setea el botón de back en el AppBar
         mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         //Setea el título en el AppBar
         mActivity?.supportActionBar?.title = getString(R.string.edit_store_title_add)
         //Setea el menú de opciones
         setHasOptionsMenu(true)
+        mBinding.etPhotoUrl.addTextChangedListener {
+            Glide.with(this)
+                .load(mBinding.etPhotoUrl.text.toString())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop()
+                .into(mBinding.imgPhoto)
+        }
 
 
     }
