@@ -2,6 +2,7 @@ package com.example.stores
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -45,7 +46,12 @@ class EditStoreFragment : Fragment() {
             Toast.makeText(activity, id.toString(), Toast.LENGTH_SHORT).show()
         }else{
             mIsEditMode = false
-            Toast.makeText(activity, id.toString(), Toast.LENGTH_SHORT).show()
+            mStoreEntity = StoreEntity(
+                name = "",
+                photoUrl = "",
+                phone = "",
+                website = ""
+            )
         }
 
        mActivity = activity as? MainActivity
@@ -79,17 +85,16 @@ class EditStoreFragment : Fragment() {
 
     private fun setUiStore(storeEntity: StoreEntity) {
         with(mBinding){
-            etName.setText(storeEntity.name)
+            etName.text = storeEntity.name.editable()
+            etPhone.text = storeEntity.phone.editable()
             etPhone.setText(storeEntity.phone)
             etWebsite.setText(storeEntity.website)
             etPhotoUrl.setText(storeEntity.photoUrl)
-            Glide.with(requireActivity())
-                .load(storeEntity.photoUrl)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .centerCrop()
-                .into(imgPhoto)
+            //La imagen se cambia cuando cambia etPhotoUrl, revisar listener
         }
     }
+
+    private fun String.editable() : Editable = Editable.Factory.getInstance().newEditable(this)
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         //Une el menú lógico con el recurso
@@ -107,28 +112,44 @@ class EditStoreFragment : Fragment() {
             }
             R.id.action_save -> {
                 //Cuando presiona una de las opciones del menú
-                val store = StoreEntity(
-                    name = mBinding.etName.text.toString().trim(),
-                    phone = mBinding.etPhone.text.toString().trim(),
-                    website = mBinding.etWebsite.text.toString().trim(),
-                    photoUrl = mBinding.etPhotoUrl.text.toString().trim()
-                )
 
-                val queue = LinkedBlockingQueue<Long>()
+                if(mStoreEntity != null){
+                    with(mStoreEntity!!){
+                        name = mBinding.etName.text.toString().trim()
+                        phone = mBinding.etPhone.text.toString().trim()
+                        website = mBinding.etWebsite.text.toString().trim()
+                        photoUrl = mBinding.etPhotoUrl.text.toString().trim()
+                    }
 
-                Thread{
-                    val id = StoreApplication.database.storeDao().addStore(store)
-                    store.id = id
-                    queue.add(id)
-                }.start()
+                    val queue = LinkedBlockingQueue<StoreEntity>()
 
-                with(queue.take()){
-                    mActivity?.addStore(store)
-                    hideKeyboard()
-                    //Snackbar.make(mBinding.root, getString(R.string.edit_store_message_success), Snackbar.LENGTH_SHORT).show()
-                    Toast.makeText(mActivity, getString(R.string.edit_store_message_success), Toast.LENGTH_SHORT).show()
-                    mActivity?.onBackPressedDispatcher?.onBackPressed()
+                    Thread{
+                        if(mIsEditMode){
+                            StoreApplication.database.storeDao().updateStore(mStoreEntity!!)
+                        }else{
+                            mStoreEntity!!.id = StoreApplication.database.storeDao().addStore(mStoreEntity!!)
+                        }
+
+                        queue.add(mStoreEntity)
+                    }.start()
+
+                    with(queue.take()){
+                        if(mIsEditMode){
+                            mActivity?.updateStore(this)
+                            Toast.makeText(mActivity, getString(R.string.edit_store_edit_message_success), Toast.LENGTH_SHORT).show()
+                        }else{
+                            mActivity?.addStore(this)
+                            Toast.makeText(mActivity, getString(R.string.edit_store_message_success), Toast.LENGTH_SHORT).show()
+                        }
+
+                        hideKeyboard()
+                        //Snackbar.make(mBinding.root, getString(R.string.edit_store_message_success), Snackbar.LENGTH_SHORT).show()
+
+                        mActivity?.onBackPressedDispatcher?.onBackPressed()
+                    }
                 }
+
+
 
                 true
             }
