@@ -22,6 +22,8 @@ class EditStoreFragment : Fragment() {
 
     private lateinit var mBinding: FragmentEditStoreBinding
     private var mActivity: MainActivity? = null
+    private var mIsEditMode: Boolean = false
+    private var mStoreEntity: StoreEntity? = null
 
 
     override fun onCreateView(
@@ -35,6 +37,16 @@ class EditStoreFragment : Fragment() {
     //Ocurre después del onCreateView
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val id = arguments?.getLong(getString(R.string.arg_id), 0)
+        if(id != null && id != 0L){
+            mIsEditMode = true
+            getStore(id)
+            Toast.makeText(activity, id.toString(), Toast.LENGTH_SHORT).show()
+        }else{
+            mIsEditMode = false
+            Toast.makeText(activity, id.toString(), Toast.LENGTH_SHORT).show()
+        }
 
        mActivity = activity as? MainActivity
         //Setea el botón de back en el AppBar
@@ -52,6 +64,31 @@ class EditStoreFragment : Fragment() {
         }
 
 
+    }
+
+    private fun getStore(id: Long) {
+        val queue = LinkedBlockingQueue<StoreEntity?>()
+        Thread{
+            mStoreEntity = StoreApplication.database.storeDao().getStoreById(id)
+            queue.add(mStoreEntity)
+        }.start()
+        queue.take()?.let{
+            setUiStore(it)
+        }
+    }
+
+    private fun setUiStore(storeEntity: StoreEntity) {
+        with(mBinding){
+            etName.setText(storeEntity.name)
+            etPhone.setText(storeEntity.phone)
+            etWebsite.setText(storeEntity.website)
+            etPhotoUrl.setText(storeEntity.photoUrl)
+            Glide.with(requireActivity())
+                .load(storeEntity.photoUrl)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .centerCrop()
+                .into(imgPhoto)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -73,7 +110,8 @@ class EditStoreFragment : Fragment() {
                 val store = StoreEntity(
                     name = mBinding.etName.text.toString().trim(),
                     phone = mBinding.etPhone.text.toString().trim(),
-                    website = mBinding.etWebsite.text.toString().trim()
+                    website = mBinding.etWebsite.text.toString().trim(),
+                    photoUrl = mBinding.etPhotoUrl.text.toString().trim()
                 )
 
                 val queue = LinkedBlockingQueue<Long>()

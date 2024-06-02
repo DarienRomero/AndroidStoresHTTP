@@ -16,7 +16,7 @@ class StoreApplication: Application() {
         super.onCreate()
         val MIGRATION_1_2 = object: Migration(1, 2){
             override fun migrate(db: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE STORE_ENTITY ADD COLUMN photoUrl TEXT NOT NULL DEFAULT ''")
+                db.execSQL("ALTER TABLE STORE_ENTITY ADD COLUMN photoUrl TEXT NOT NULL DEFAULT ''")
             }
 
         }
