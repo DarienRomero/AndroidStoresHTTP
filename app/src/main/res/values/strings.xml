@@ -14,4 +14,5 @@
     <string name="edit_store_message_success">Tienda agregada correctamente</string>
     <string name="arg_id">arg_id</string>
     <string name="edit_store_edit_message_success">Tienda actualizada</string>
+    <string name="edit_store_message_invalid">Revise los campos requeridos</string>
 </resources>

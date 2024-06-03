@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.stores.databinding.FragmentEditStoreBinding
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import java.util.concurrent.LinkedBlockingQueue
 
 class EditStoreFragment : Fragment() {
@@ -113,7 +114,7 @@ class EditStoreFragment : Fragment() {
             R.id.action_save -> {
                 //Cuando presiona una de las opciones del menú
 
-                if(mStoreEntity != null){
+                if(mStoreEntity != null && validateFields(mBinding.tilPhone, mBinding.tilName, mBinding.tilPhotoUrl)) {
                     with(mStoreEntity!!){
                         name = mBinding.etName.text.toString().trim()
                         phone = mBinding.etPhone.text.toString().trim()
@@ -158,6 +159,42 @@ class EditStoreFragment : Fragment() {
 
             }
         }
+    }
+
+    private fun validateFields(vararg textFields: TextInputLayout) : Boolean {
+        var isValid = true;
+        for(textField in textFields){
+            if(textField.editText?.text.toString().trim().isEmpty()){
+                textField.error = getString(R.string.helper_required)
+                textField.editText?.requestFocus()
+                isValid = false
+            }
+        }
+        if(!isValid) {
+            Snackbar.make(mBinding.root, R.string.edit_store_message_invalid, Snackbar.LENGTH_SHORT).show()
+        }
+        return isValid;
+    }
+    private fun validateFields(): Boolean {
+        var isValid = true;
+        if(mBinding.etPhotoUrl.text.toString().trim().isEmpty()){
+            mBinding.tilPhotoUrl.error = getString(R.string.helper_required)
+            mBinding.etPhotoUrl.requestFocus()
+            isValid = false
+        }
+
+        if(mBinding.etPhone.text.toString().trim().isEmpty()){
+            mBinding.tilPhotoUrl.error = getString(R.string.helper_required)
+            mBinding.etPhone.requestFocus()
+            isValid = false
+        }
+
+        if(mBinding.etName.text.toString().trim().isEmpty()){
+            mBinding.tilPhotoUrl.error = getString(R.string.helper_required)
+            mBinding.etName.requestFocus()
+            isValid = false
+        }
+        return isValid;
     }
 
     private fun hideKeyboard(){
