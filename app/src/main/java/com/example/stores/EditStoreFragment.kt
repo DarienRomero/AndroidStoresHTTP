@@ -54,23 +54,42 @@ class EditStoreFragment : Fragment() {
                 website = ""
             )
         }
+        setupActionBar()
+        setupTextFields()
+    }
 
-       mActivity = activity as? MainActivity
+    private fun setupActionBar() {
+        mActivity = activity as? MainActivity
         //Setea el botón de back en el AppBar
         mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         //Setea el título en el AppBar
-        mActivity?.supportActionBar?.title = getString(R.string.edit_store_title_add)
+        mActivity?.supportActionBar?.title = if(mIsEditMode) getString(R.string.edit_store_title_edit) else getString(R.string.edit_store_title_add)
         //Setea el menú de opciones
         setHasOptionsMenu(true)
-        mBinding.etPhotoUrl.addTextChangedListener {
-            Glide.with(this)
-                .load(mBinding.etPhotoUrl.text.toString())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .centerCrop()
-                .into(mBinding.imgPhoto)
+    }
+
+    private fun setupTextFields() {
+        with(mBinding){
+            etPhotoUrl.addTextChangedListener {
+                validateFields(mBinding.tilPhotoUrl)
+                loadImage(it.toString())
+            }
+            etName.addTextChangedListener {
+                validateFields(mBinding.tilName)
+            }
+            etPhone.addTextChangedListener {
+                validateFields(mBinding.tilPhone)
+            }
         }
 
+    }
 
+    private fun loadImage(url: String){
+        Glide.with(this)
+            .load(String)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .centerCrop()
+            .into(mBinding.imgPhoto)
     }
 
     private fun getStore(id: Long) {
@@ -168,6 +187,8 @@ class EditStoreFragment : Fragment() {
                 textField.error = getString(R.string.helper_required)
                 textField.editText?.requestFocus()
                 isValid = false
+            }else{
+                textField.error = null
             }
         }
         if(!isValid) {
