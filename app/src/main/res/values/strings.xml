@@ -16,4 +16,12 @@
     <string name="arg_id">arg_id</string>
     <string name="edit_store_edit_message_success">Tienda actualizada</string>
     <string name="edit_store_message_invalid">Revise los campos requeridos</string>
+    <string name="dialog_delete_title">Eliminar tienda?</string>
+    <string name="dialog_delete_confirm">Eliminar</string>
+    <string name="options_item_call">Eliminar</string>
+    <string name="options_item_website">Ir al sitio web</string>
+    <string name="dialog_delete_cancel">Cancelar</string>
+    <string name="dialog_options_title">Qué desea hacer?</string>
+    <string name="main_error_not_website">La tienda no tiene una website</string>
+    <string name="main_error_no_resolve">No se encontró ninguna app compatible</string>
 </resources>
