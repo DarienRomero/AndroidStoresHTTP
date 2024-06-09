@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tienda</string>
+    <string name="description_img_photo">Imagen de la tienda</string>
+    <string name="description_store_add">Crear tienda</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hint_name">Nombre de la tienda</string>
+    <string name="helper_required">Requerido</string>
+    <string name="hint_phone">Teléfono</string>
+    <string name="hint_website">Url del sitio web</string>
+    <string name="hint_photo_url">Url de la imagen</string>
+    <string name="edit_store_title_add">Crear tienda</string>
+    <string name="edit_store_title_edit">Editar tienda</string>
+    <string name="menu_save">Save</string>
+    <string name="edit_store_message_success">Tienda agregada correctamente</string>
+    <string name="arg_id">arg_id</string>
+    <string name="edit_store_edit_message_success">Tienda actualizada</string>
+    <string name="edit_store_message_invalid">Revise los campos requeridos</string>
+    <string name="dialog_delete_title">Eliminar tienda?</string>
+    <string name="dialog_delete_confirm">Eliminar</string>
+    <string name="options_item_call">Llamar</string>
+    <string name="options_item_website">Ir al sitio web</string>
+    <string name="dialog_delete_cancel">Cancelar</string>
+    <string name="dialog_options_title">Qué desea hacer?</string>
+    <string name="main_error_not_website">La tienda no tiene una website</string>
+    <string name="main_error_no_resolve">No se encontró ninguna app compatible</string>
+</resources>

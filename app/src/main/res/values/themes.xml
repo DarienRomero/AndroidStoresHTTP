@@ -2,7 +2,21 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Stores" parent="Theme.Material3.DayNight">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Primary colors -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryVariant">@color/primaryLightColor</item>
+        <item name="colorOnPrimary">@color/primaryTextColor</item>
+
+        <!-- AppBar colors -->
+        <item name="colorSurface">@color/primaryColor</item>
+        <item name="colorOnSurface">@color/primaryTextColor</item>
+        <item name="colorSurfaceVariant">@color/primaryLightColor</item>
+        <item name="colorOnSurfaceVariant">@color/primaryDarkColor</item>
+
+        <!-- Secondary colors -->
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryLightColor</item>
+        <item name="colorOnSecondary">@color/secondaryTextColor</item>
     </style>
 
     <style name="Theme.Stores" parent="Base.Theme.Stores" />
