@@ -12,10 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.core.widget.addTextChangedListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.stores.databinding.FragmentEditStoreBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import java.util.concurrent.LinkedBlockingQueue
@@ -116,6 +119,26 @@ class EditStoreFragment : Fragment() {
 
     private fun String.editable() : Editable = Editable.Factory.getInstance().newEditable(this)
 
+    override fun onAttach(context: Context) {
+        requireActivity().onBackPressedDispatcher.addCallback(this,object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                MaterialAlertDialogBuilder(requireActivity())
+                    .setTitle(R.string.dialog_exit_title)
+                    .setMessage(R.string.dialog_exit_message)
+                    .setPositiveButton(R.string.dialog_exit_ok){_,_ ->
+                        if(isEnabled){
+                            isEnabled = false
+                            mActivity?.onBackPressedDispatcher?.onBackPressed()
+                        }
+
+                    }
+                    .setNegativeButton(R.string.dialog_delete_cancel, null)
+                    .show()
+            }
+        })
+        super.onAttach(context)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         //Une el menú lógico con el recurso
         inflater.inflate(R.menu.menu_save, menu)
@@ -165,7 +188,7 @@ class EditStoreFragment : Fragment() {
                         hideKeyboard()
                         //Snackbar.make(mBinding.root, getString(R.string.edit_store_message_success), Snackbar.LENGTH_SHORT).show()
 
-                        mActivity?.onBackPressedDispatcher?.onBackPressed()
+                        requireActivity().onBackPressedDispatcher.onBackPressed()
                     }
                 }
 

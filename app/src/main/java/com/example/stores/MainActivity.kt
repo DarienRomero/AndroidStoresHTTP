@@ -93,13 +93,13 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
             this
         )
             .setTitle(R.string.dialog_options_title)
-            .setItems(items, {dialogInterface, i ->
-                when(i){
+            .setItems(items) { _, i ->
+                when (i) {
                     0 -> confirmDelete(storeEntity)
                     1 -> dial(storeEntity.phone)
                     2 -> goToWebsite(storeEntity.website)
                 }
-            })
+            }
             .show()
 
     }
@@ -140,14 +140,14 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
             this
         )
             .setTitle(R.string.dialog_delete_title)
-            .setPositiveButton(R.string.dialog_delete_confirm, {dialogInterface, i ->
+            .setPositiveButton(R.string.dialog_delete_confirm) { _, _ ->
                 val queue = LinkedBlockingQueue<StoreEntity>()
                 Thread {
                     StoreApplication.database.storeDao().deleteStore(storeEntity)
                     queue.add(storeEntity)
                 }.start()
                 mAdapter.delete(queue.take())
-            })
+            }
             .setNegativeButton(R.string.dialog_delete_cancel, null)
             .show()
     }

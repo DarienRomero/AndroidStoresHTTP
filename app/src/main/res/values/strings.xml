@@ -23,4 +23,7 @@
     <string name="dialog_options_title">What do you want to do?</string>
     <string name="main_error_not_website">The store does not have a website</string>
     <string name="main_error_no_resolve">No compatible app found</string>
+    <string name="dialog_exit_title">¿Salir de esta pantalla?</string>
+    <string name="dialog_exit_message">Si no has guardado cambios, se perderan</string>
+    <string name="dialog_exit_ok">Salir</string>
 </resources>
