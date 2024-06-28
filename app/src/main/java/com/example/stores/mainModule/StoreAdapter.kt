@@ -1,4 +1,4 @@
-package com.example.stores
+package com.example.stores.mainModule
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,7 +9,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.stores.R
+import com.example.stores.commonModule.entitie.StoreEntity
 import com.example.stores.databinding.ItemStoreBinding
+import com.example.stores.mainModule.adapter.OnClickListener
 
 class StoreAdapter(private var stores: MutableList<StoreEntity>, private val listener: OnClickListener) : RecyclerView.Adapter<StoreAdapter.ViewHolder>() {
     private lateinit var context: Context
@@ -80,9 +83,9 @@ class StoreAdapter(private var stores: MutableList<StoreEntity>, private val lis
         }
     }
 
-    fun setStores(stores: MutableList<StoreEntity>) {
+    fun setStores(stores: List<StoreEntity>) {
         try{
-            this.stores = stores
+            this.stores = stores as MutableList<StoreEntity>
             notifyDataSetChanged()
         }catch(e: Exception){
             Log.d("TEST", e.toString())

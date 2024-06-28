@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:ignore="ScrollViewCount"
     android:background="@android:color/white"
-    tools:context=".EditStoreFragment">
+    tools:context=".editModule.EditStoreFragment">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

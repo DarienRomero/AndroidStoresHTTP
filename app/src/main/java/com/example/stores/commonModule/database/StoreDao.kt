@@ -1,10 +1,11 @@
-package com.example.stores
+package com.example.stores.commonModule.database
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.example.stores.commonModule.entitie.StoreEntity
 
 @Dao
 interface StoreDao {

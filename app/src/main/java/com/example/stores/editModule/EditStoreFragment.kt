@@ -1,4 +1,4 @@
-package com.example.stores
+package com.example.stores.editModule
 
 import android.content.Context
 import android.os.Bundle
@@ -13,11 +13,14 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
 import androidx.core.widget.addTextChangedListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.stores.R
+import com.example.stores.StoreApplication
+import com.example.stores.commonModule.entitie.StoreEntity
 import com.example.stores.databinding.FragmentEditStoreBinding
+import com.example.stores.mainModule.MainActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
@@ -66,7 +69,9 @@ class EditStoreFragment : Fragment() {
         //Setea el botón de back en el AppBar
         mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         //Setea el título en el AppBar
-        mActivity?.supportActionBar?.title = if(mIsEditMode) getString(R.string.edit_store_title_edit) else getString(R.string.edit_store_title_add)
+        mActivity?.supportActionBar?.title = if(mIsEditMode) getString(R.string.edit_store_title_edit) else getString(
+            R.string.edit_store_title_add
+        )
         //Setea el menú de opciones
         setHasOptionsMenu(true)
     }
@@ -125,7 +130,7 @@ class EditStoreFragment : Fragment() {
                 MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.dialog_exit_title)
                     .setMessage(R.string.dialog_exit_message)
-                    .setPositiveButton(R.string.dialog_exit_ok){_,_ ->
+                    .setPositiveButton(R.string.dialog_exit_ok){ _, _ ->
                         if(isEnabled){
                             isEnabled = false
                             mActivity?.onBackPressedDispatcher?.onBackPressed()

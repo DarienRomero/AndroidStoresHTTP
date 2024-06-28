@@ -1,4 +1,6 @@
-package com.example.stores
+package com.example.stores.mainModule.adapter
+
+import com.example.stores.commonModule.entitie.StoreEntity
 
 interface OnClickListener {
     fun onClick(storeId: Long)

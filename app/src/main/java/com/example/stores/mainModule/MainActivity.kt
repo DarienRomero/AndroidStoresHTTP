@@ -1,4 +1,4 @@
-package com.example.stores
+package com.example.stores.mainModule
 
 import android.content.Intent
 import android.net.Uri
@@ -6,8 +6,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.stores.editModule.EditStoreFragment
+import com.example.stores.commonModule.util.MainAux
+import com.example.stores.R
+import com.example.stores.StoreApplication
+import com.example.stores.commonModule.entitie.StoreEntity
 import com.example.stores.databinding.ActivityMainBinding
+import com.example.stores.mainModule.adapter.OnClickListener
+import com.example.stores.mainModule.viewModel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.concurrent.LinkedBlockingQueue
 
@@ -16,6 +24,8 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var mAdapter: StoreAdapter
     private lateinit var mGridLayout: GridLayoutManager
+    //MVVM
+    private lateinit var mMainViewModel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -23,7 +33,15 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
         mBinding.fab.setOnClickListener {
             launchEditFragment()
         }
+        setupViewModel()
         setupRecyclerView()
+    }
+
+    private fun setupViewModel() {
+        mMainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        mMainViewModel.getStores().observe(this, {stores ->
+            mAdapter.setStores(stores.toList())
+        })
     }
 
     private fun launchEditFragment(args: Bundle? = null) {
@@ -44,7 +62,6 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
     private fun setupRecyclerView(){
         mAdapter = StoreAdapter(mutableListOf(), this);
         mGridLayout = GridLayoutManager(this, resources.getInteger(R.integer.main_columns))
-        getAllStores()
         mBinding.recyclerView.apply {
             setHasFixedSize(true)
             layoutManager = mGridLayout
@@ -53,16 +70,15 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
     }
 
     private fun getAllStores(){
-        val queue = LinkedBlockingQueue<MutableList<StoreEntity>>()
-        Thread {
-            val stores = StoreApplication.database.storeDao().getAllStores()
-            queue.add(stores)
-        }.start()
-
-        val stores = queue.take()
-
-        Log.d("TEST", stores.size.toString())
-        mAdapter.setStores(stores)
+        //val queue = LinkedBlockingQueue<MutableList<StoreEntity>>()
+        //Thread {
+        //    val stores = StoreApplication.database.storeDao().getAllStores()
+        //    queue.add(stores)
+        //}.start()
+        //
+        //val stores = queue.take()
+        //
+        //mAdapter.setStores(stores)
 
     }
 
