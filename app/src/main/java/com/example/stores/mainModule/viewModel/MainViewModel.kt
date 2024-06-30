@@ -5,28 +5,38 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.stores.StoreApplication
 import com.example.stores.commonModule.entitie.StoreEntity
+import com.example.stores.mainModule.model.MainInteractor
 import java.util.concurrent.LinkedBlockingQueue
 
 class MainViewModel: ViewModel() {
-    private var stores: MutableLiveData<List<StoreEntity>>
+
+    private var interactor: MainInteractor
     init {
-        stores = MutableLiveData()
-        loadStores()
+        interactor = MainInteractor()
     }
 
     fun getStores() : LiveData<List<StoreEntity>> {
-        return stores
+        return stores.also{
+            loadStores()
+        }
+    }
+
+    private val stores: MutableLiveData<List<StoreEntity>> by lazy {
+        MutableLiveData<List<StoreEntity>>()
     }
 
     private fun loadStores(){
-        val queue = LinkedBlockingQueue<MutableList<StoreEntity>>()
-        Thread {
-            val stores = StoreApplication.database.storeDao().getAllStores()
-            queue.add(stores)
-        }.start()
+//        interactor.getStoresCallback(object: MainInteractor.StoresCallback{
+//            override fun getStoresCallback(callback: MutableList<StoreEntity>) {
+//                stores.value = callback
+//            }
+//
+//        })
 
-        val stores = queue.take()
+        interactor.getStores {
+            stores.value = it
+        }
 
-        this.stores.value = stores
+
     }
 }
