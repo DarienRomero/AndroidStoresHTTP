@@ -183,7 +183,8 @@ class EditStoreFragment : Fragment() {
 
                     with(queue.take()){
                         if(mIsEditMode){
-                            mActivity?.updateStore(this)
+                            // TODO: terminar
+//                            mActivity?.updateStore(this)
                             Toast.makeText(mActivity, getString(R.string.edit_store_edit_message_success), Toast.LENGTH_SHORT).show()
                         }else{
                             mActivity?.addStore(this)

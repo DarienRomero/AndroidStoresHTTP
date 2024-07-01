@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
     private fun setupViewModel() {
         mMainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         mMainViewModel.getStores().observe(this, {stores ->
+            Log.d("EVENT observed", stores.toString())
             mAdapter.setStores(stores.toList())
         })
     }
@@ -93,7 +94,6 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
     }
 
     override fun onFavoriteStore(storeEntity: StoreEntity) {
-        storeEntity.isFavorite = !storeEntity.isFavorite
         mMainViewModel.updateStore(storeEntity)
     }
 
@@ -151,12 +151,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
         )
             .setTitle(R.string.dialog_delete_title)
             .setPositiveButton(R.string.dialog_delete_confirm) { _, _ ->
-                val queue = LinkedBlockingQueue<StoreEntity>()
-                Thread {
-                    StoreApplication.database.storeDao().deleteStore(storeEntity)
-                    queue.add(storeEntity)
-                }.start()
-                mAdapter.delete(queue.take())
+                mMainViewModel.deleteStore(storeEntity)
             }
             .setNegativeButton(R.string.dialog_delete_cancel, null)
             .show()
@@ -174,9 +169,6 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
         mAdapter.add(storeEntity)
     }
 
-    override fun updateStore(storeEntity: StoreEntity) {
-        mAdapter.update(storeEntity)
-    }
 
 
 }
