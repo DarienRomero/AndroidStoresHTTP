@@ -9,9 +9,10 @@ import com.example.stores.mainModule.model.MainInteractor
 import java.util.concurrent.LinkedBlockingQueue
 
 class MainViewModel: ViewModel() {
-
+    private var storeList: MutableList<StoreEntity>
     private var interactor: MainInteractor
     init {
+        storeList =  mutableListOf()
         interactor = MainInteractor()
     }
 
@@ -36,7 +37,24 @@ class MainViewModel: ViewModel() {
         interactor.getStores {
             stores.value = it
         }
+    }
 
-
+    fun deleteStore(storeEntity: StoreEntity){
+        interactor.deleteStore(storeEntity, {deleted ->
+            val index = storeList.indexOf(storeEntity)
+            if(index != -1){
+                storeList.removeAt(index)
+                stores.value = storeList
+            }
+        })
+    }
+    fun updateStore(storeEntity: StoreEntity){
+        interactor.updateStore(storeEntity, {deleted ->
+            val index = storeList.indexOf(storeEntity)
+            if(index != -1){
+                storeList[index] = storeEntity
+                stores.value = storeList
+            }
+        })
     }
 }

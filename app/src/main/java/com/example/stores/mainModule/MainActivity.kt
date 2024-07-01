@@ -94,13 +94,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
 
     override fun onFavoriteStore(storeEntity: StoreEntity) {
         storeEntity.isFavorite = !storeEntity.isFavorite
-        val queue = LinkedBlockingQueue<StoreEntity>()
-
-        Thread {
-            StoreApplication.database.storeDao().updateStore(storeEntity)
-            queue.add(storeEntity)
-        }.start()
-        updateStore(queue.take())
+        mMainViewModel.updateStore(storeEntity)
     }
 
     override fun onDeleteStore(storeEntity: StoreEntity) {
