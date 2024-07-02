@@ -14,18 +14,20 @@ import com.example.stores.R
 import com.example.stores.StoreApplication
 import com.example.stores.commonModule.entitie.StoreEntity
 import com.example.stores.databinding.ActivityMainBinding
+import com.example.stores.editModule.viewModel.EditStoreViewModel
 import com.example.stores.mainModule.adapter.OnClickListener
 import com.example.stores.mainModule.viewModel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.concurrent.LinkedBlockingQueue
 
-class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
+class MainActivity : AppCompatActivity(), OnClickListener {
 
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var mAdapter: StoreAdapter
     private lateinit var mGridLayout: GridLayoutManager
     //MVVM
     private lateinit var mMainViewModel: MainViewModel
+    private lateinit var mEditViewModel: EditStoreViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -39,10 +41,18 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
 
     private fun setupViewModel() {
         mMainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        mMainViewModel.getStores().observe(this, {stores ->
+        mMainViewModel.getStores().observe(this) {stores ->
             Log.d("EVENT observed", stores.toString())
             mAdapter.setStores(stores.toList())
-        })
+        }
+        mEditViewModel = ViewModelProvider(this).get(EditStoreViewModel::class.java)
+        mEditViewModel.getShowFab().observe(this){ isVisible ->
+            if(isVisible){
+                mBinding.fab.show()
+            }else{
+                mBinding.fab.hide()
+            }
+        }
     }
 
     private fun launchEditFragment(args: Bundle? = null) {
@@ -56,7 +66,7 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
 
-        hideFab(false)
+        mEditViewModel.setShowFab(false)
 
     }
 
@@ -155,18 +165,6 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
             }
             .setNegativeButton(R.string.dialog_delete_cancel, null)
             .show()
-    }
-
-    override fun hideFab(isVisible: Boolean) {
-        if(isVisible){
-            mBinding.fab.show()
-        }else{
-            mBinding.fab.hide()
-        }
-    }
-
-    override fun addStore(storeEntity: StoreEntity, mIsEditMode: Boolean) {
-        mMainViewModel.addStore(storeEntity, mIsEditMode)
     }
 
 

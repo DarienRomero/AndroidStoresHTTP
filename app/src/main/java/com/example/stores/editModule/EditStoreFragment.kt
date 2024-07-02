@@ -14,12 +14,14 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.stores.R
 import com.example.stores.StoreApplication
 import com.example.stores.commonModule.entitie.StoreEntity
 import com.example.stores.databinding.FragmentEditStoreBinding
+import com.example.stores.editModule.viewModel.EditStoreViewModel
 import com.example.stores.mainModule.MainActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -32,6 +34,13 @@ class EditStoreFragment : Fragment() {
     private var mActivity: MainActivity? = null
     private var mIsEditMode: Boolean = false
     private var mStoreEntity: StoreEntity? = null
+    //MVVM
+    private lateinit var mEditStoreViewModel: EditStoreViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mEditStoreViewModel = ViewModelProvider(requireActivity()).get(EditStoreViewModel::class.java)
+    }
 
 
     override fun onCreateView(
@@ -60,8 +69,15 @@ class EditStoreFragment : Fragment() {
                 website = ""
             )
         }
+        //MVVM
+        setupViewModel()
         setupActionBar()
         setupTextFields()
+    }
+
+    private fun setupViewModel() {
+
+
     }
 
     private fun setupActionBar() {
@@ -187,7 +203,7 @@ class EditStoreFragment : Fragment() {
 //                            mActivity?.updateStore(this)
                             Toast.makeText(mActivity, getString(R.string.edit_store_edit_message_success), Toast.LENGTH_SHORT).show()
                         }else{
-                            mActivity?.addStore(this, mIsEditMode)
+                            //mActivity?.addStore(this, mIsEditMode)
                             Toast.makeText(mActivity, getString(R.string.edit_store_message_success), Toast.LENGTH_SHORT).show()
                         }
 
@@ -261,7 +277,7 @@ class EditStoreFragment : Fragment() {
         //Cuando se destruye el Fragment, se borra el back, se cambia el tiulo y se muestra el fab
         mActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(false)
         mActivity?.supportActionBar?.title = getString(R.string.app_name)
-        mActivity?.hideFab(true)
+        mEditStoreViewModel.setShowFab(true)
         super.onDestroy()
     }
 
