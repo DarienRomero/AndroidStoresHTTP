@@ -41,22 +41,29 @@ class MainViewModel: ViewModel() {
     }
 
     fun deleteStore(storeEntity: StoreEntity){
-        interactor.deleteStore(storeEntity, {deleted ->
+        interactor.deleteStore(storeEntity) { _ ->
             val index = storeList.indexOf(storeEntity)
-            if(index != -1){
+            if (index != -1) {
                 storeList.removeAt(index)
                 stores.value = storeList
             }
-        })
+        }
+    }
+    fun addStore(storeEntity: StoreEntity, mIsEditMode: Boolean){
+        interactor.addStore(storeEntity, mIsEditMode) {
+            storeList.add(storeEntity)
+            storeList.add(storeEntity)
+            stores.value = storeList
+        }
     }
     fun updateStore(storeEntity: StoreEntity){
         storeEntity.isFavorite = !storeEntity.isFavorite
-        interactor.updateStore(storeEntity, {deleted ->
+        interactor.updateStore(storeEntity) {
             val index = storeList.indexOf(storeEntity)
-            if(index != -1){
+            if (index != -1) {
                 storeList[index] = storeEntity
                 stores.value = storeList
             }
-        })
+        }
     }
 }

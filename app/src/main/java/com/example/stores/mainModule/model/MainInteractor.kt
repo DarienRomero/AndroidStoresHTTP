@@ -30,6 +30,21 @@ class MainInteractor {
         callback(queue.take())
     }
 
+    fun addStore(storeEntity: StoreEntity, mIsEditMode: Boolean, callback: ((StoreEntity) -> Unit)){
+        val queue = LinkedBlockingQueue<StoreEntity>()
+        Thread{
+            if(mIsEditMode){
+                StoreApplication.database.storeDao().updateStore(storeEntity)
+            }else{
+                storeEntity.id = StoreApplication.database.storeDao().addStore(storeEntity)
+            }
+
+            queue.add(storeEntity)
+        }.start()
+
+        callback(queue.take())
+    }
+
     fun updateStore(storeEntity: StoreEntity, callback: ((StoreEntity) -> Unit)){
         storeEntity.isFavorite = !storeEntity.isFavorite
         val queue = LinkedBlockingQueue<StoreEntity>()

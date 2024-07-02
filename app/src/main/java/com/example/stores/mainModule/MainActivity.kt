@@ -165,8 +165,8 @@ class MainActivity : AppCompatActivity(), OnClickListener, MainAux {
         }
     }
 
-    override fun addStore(storeEntity: StoreEntity) {
-        mAdapter.add(storeEntity)
+    override fun addStore(storeEntity: StoreEntity, mIsEditMode: Boolean) {
+        mMainViewModel.addStore(storeEntity, mIsEditMode)
     }
 
 

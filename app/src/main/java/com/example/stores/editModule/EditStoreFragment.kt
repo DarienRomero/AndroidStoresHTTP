@@ -187,7 +187,7 @@ class EditStoreFragment : Fragment() {
 //                            mActivity?.updateStore(this)
                             Toast.makeText(mActivity, getString(R.string.edit_store_edit_message_success), Toast.LENGTH_SHORT).show()
                         }else{
-                            mActivity?.addStore(this)
+                            mActivity?.addStore(this, mIsEditMode)
                             Toast.makeText(mActivity, getString(R.string.edit_store_message_success), Toast.LENGTH_SHORT).show()
                         }
 
