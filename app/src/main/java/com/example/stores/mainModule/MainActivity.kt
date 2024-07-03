@@ -53,11 +53,14 @@ class MainActivity : AppCompatActivity(), OnClickListener {
                 mBinding.fab.hide()
             }
         }
+        mEditViewModel.getStoreSelected().observe(this){ storeEntity ->
+            mAdapter.add(storeEntity)
+        }
     }
 
-    private fun launchEditFragment(args: Bundle? = null) {
+    private fun launchEditFragment(storeEntity: StoreEntity = StoreEntity()) {
         val fragment = EditStoreFragment()
-        if(args != null) fragment.arguments = args
+        mEditViewModel.setStoreSelected(storeEntity)
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
 
@@ -79,28 +82,11 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             adapter = mAdapter
         }
     }
-
-    private fun getAllStores(){
-        //val queue = LinkedBlockingQueue<MutableList<StoreEntity>>()
-        //Thread {
-        //    val stores = StoreApplication.database.storeDao().getAllStores()
-        //    queue.add(stores)
-        //}.start()
-        //
-        //val stores = queue.take()
-        //
-        //mAdapter.setStores(stores)
-
-    }
-
     /*
     * OnClickListener
      **/
-    override fun onClick(storeId: Long) {
-        val args = Bundle()
-        args.putLong(getString(R.string.arg_id), storeId)
-
-        launchEditFragment(args)
+    override fun onClickListItem(storeEntity: StoreEntity) {
+        launchEditFragment(storeEntity)
     }
 
     override fun onFavoriteStore(storeEntity: StoreEntity) {
