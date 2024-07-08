@@ -5,20 +5,18 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.stores.editModule.EditStoreFragment
-import com.example.stores.commonModule.util.MainAux
 import com.example.stores.R
-import com.example.stores.StoreApplication
 import com.example.stores.commonModule.entitie.StoreEntity
 import com.example.stores.databinding.ActivityMainBinding
 import com.example.stores.editModule.viewModel.EditStoreViewModel
 import com.example.stores.mainModule.adapter.OnClickListener
 import com.example.stores.mainModule.viewModel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.util.concurrent.LinkedBlockingQueue
 
 class MainActivity : AppCompatActivity(), OnClickListener {
 
@@ -44,6 +42,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         mMainViewModel.getStores().observe(this) {stores ->
             Log.d("EVENT observed", stores.toString())
             mAdapter.setStores(stores.toList())
+            mBinding.progressBar.visibility = View.VISIBLE
         }
         mEditViewModel = ViewModelProvider(this).get(EditStoreViewModel::class.java)
         mEditViewModel.getShowFab().observe(this){ isVisible ->

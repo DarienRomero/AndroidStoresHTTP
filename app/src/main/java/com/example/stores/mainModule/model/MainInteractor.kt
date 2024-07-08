@@ -16,16 +16,21 @@ class MainInteractor {
     fun getStores(callback: ((MutableList<StoreEntity>) -> Unit)){
         val jsonObjectResponse = JsonObjectRequest(Request.Method.GET, url, null, { response ->
             Log.i("Response", response.toString())
-            val status = response.getInt(Constants.STATUS_PROPERTY)
+            //val status = response.getInt(Constants.STATUS_PROPERTY)
+            val status = response.optInt(Constants.STATUS_PROPERTY, Constants.ERROR)
             if(status == Constants.SUCCESS){
                 Log.i("status", status.toString())
-                val jsonObject = Gson().fromJson(response.getJSONArray(Constants.STORES_PROPERTY).get(0).toString(), StoreEntity::class.java)
-                val jsonList = response.getJSONArray(Constants.STORES_PROPERTY).get(0).toString()
-                val mutableListType = object : TypeToken<MutableList<StoreEntity>>(){
+                //val jsonObject = Gson().fromJson(response.getJSONArray(Constants.STORES_PROPERTY).get(0).toString(), StoreEntity::class.java)
+                val jsonArray = response.optJSONArray(Constants.STORES_PROPERTY)
+                if(jsonArray != null){
+                    val jsonList = jsonArray.get(0).toString()
+                    val mutableListType = object : TypeToken<MutableList<StoreEntity>>(){
 
-                }.type
-                val storeList = Gson().fromJson<MutableList<StoreEntity>>(jsonList, mutableListType)
-                callback(storeList)
+                    }.type
+                    val storeList = Gson().fromJson<MutableList<StoreEntity>>(jsonList, mutableListType)
+                    callback(storeList)
+                }
+
             }
         }, {
             it.printStackTrace()
